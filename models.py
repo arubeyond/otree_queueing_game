@@ -30,12 +30,12 @@ class Constants(BaseConstants):
 
 class Subsession(BaseSubsession):
     def creating_session(self):
-        self.group_randomly()
-        """
+        #self.group_randomly()
         matching_matrix = [[[1,3],[2,4]],[[1,4],[2,3]]]
-        self.set_group_matrix(matching_matrix)
+        self.set_group_matrix(matching_matrix[self.round_number-1])
         #2人*2グループ*2ラウンドがうまくいくか
         #自前のランダム化関数でうまくいくか
+        """
     def vars_for_admin_report(self):
         #arrival time distribution?
         #mean payoff?
