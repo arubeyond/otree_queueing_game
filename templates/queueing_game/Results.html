@@ -1,0 +1,23 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+    Results
+{% endblock %}
+
+{% block content %}
+  
+
+<p>
+    あなたの選んだ到着時刻は{{player.arrival_time}}
+</p>
+<p>
+    あなたの待ち時間は{{player.waiting_time}}
+</p>
+
+    {% next_button %}
+
+
+
+
+{% endblock %}

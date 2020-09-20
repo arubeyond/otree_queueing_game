@@ -1,0 +1,17 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+    DecideArrivalTime
+{% endblock %}
+
+{% block content %}
+    <p>
+    あなたの到着時刻を0から{{Constants.T}}までの整数で入力してください。
+    </p>
+    {% formfield player.arrival_time %}
+
+    {% next_button %}
+
+
+{% endblock %}
