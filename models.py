@@ -9,9 +9,12 @@ from otree.api import (
     currency_range,
 )
 
-import random
 import numpy as np
-random.seed(0)
+
+
+doc = """
+Queueing Game for Determ arrival and Determ service
+"""
 np.random.seed(seed=0)
 
 
@@ -42,40 +45,37 @@ def make_matching():
     #休みを平均化したもの、R,N,Gを内生化
     return matrix
 
-doc = """
-Queueing Game for Determ arrival and Determ service
-"""
 matching_matrix = make_matching()
-
 
 class Constants(BaseConstants):
     name_in_url = 'queueing_game'
-    players_per_group = 3  
-    #グループ人数は上のmake_matching関数で変更する。ここは参加被験者数と一致させる
+    players_per_group = 3  #グループ人数は上のmake_matching関数で変更する。ここは参加被験者数と一致させる
     num_rounds = 2  #default 30
 
     instructions_template = 'queueing_game/instructions.html'
     service_time_fix = 4 #for display
     T = 20 #max of time
 
-
 class Subsession(BaseSubsession):
     def creating_session(self):
         #self.group_randomly()
         self.set_group_matrix(matching_matrix[self.round_number-1])
-        #自前のランダム化関数でうまくいくか
+        
         """
     def vars_for_admin_report(self):
         #arrival time distribution?
         #mean payoff?
         """
 
-
 class Group(BaseGroup):
     social_payoff = models.IntegerField()
     overwork = models.IntegerField()
-    #こっちでサービス時間の設定を行う
+    
     def calc_waitingtime(self):
+        #for player in self.get_players():
+        #    player.service_time = np.random.geometric(0.25)
+        #幾何サービス用の設定    
+        
         workload = 0
         for t in range(Constants.T+1):
             workload = max(0,workload-1)
@@ -83,7 +83,7 @@ class Group(BaseGroup):
             for player in self.get_players():
                 if player.arrival_time == t:
                     arrival_players.append(player)
-            random.shuffle(arrival_players)
+            np.random.shuffle(arrival_players)
             for player in arrival_players:
                 player.waiting_time = workload
                 workload += player.service_time
@@ -91,10 +91,7 @@ class Group(BaseGroup):
         self.overwork = workload
         self.social_payoff = sum([player.waiting_time for player in self.get_players()])
         
-
-
-
 class Player(BasePlayer):
     arrival_time = models.IntegerField(min=0,max=Constants.T, doc="""The time player arrived""")
-    service_time = models.IntegerField(initial=4)
+    service_time = models.IntegerField(initial=Constants.service_time_fix)
     waiting_time = models.IntegerField()

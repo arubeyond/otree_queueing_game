@@ -2,17 +2,14 @@ from ._builtin import Page, WaitPage
 from otree.api import Currency as c, currency_range
 from .models import Constants
 
-
 class Introduction(Page):
     def is_displayed(self):
         return self.round_number == 1 
     #ラウンド1のみ表示する
     pass
 
-class ReadIntroductionWait(WaitPage):
+class StartWait(WaitPage):
     wait_for_all_groups=True
-    def is_displayed(self):
-        return self.round_number == 1
     body_text = "Waiting for other participants."
 
 class DecideArrivalTime(Page):
@@ -32,7 +29,6 @@ class ResultsWaitPage(WaitPage):
     after_all_players_arrive = 'calc_waitingtime'
     body_text = "Waiting for other participants to input."
 
-
 class Results(Page):
     def is_displayed(self):
         return self.group.id_in_subsession > 1
@@ -43,6 +39,6 @@ class Results(Page):
     """
 
 
-page_sequence = [Introduction,ReadIntroductionWait, 
+page_sequence = [Introduction,StartWait, 
                  DecideArrivalTime, DecideWaitPage, 
                  ResultsWaitPage, Results]
