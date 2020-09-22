@@ -61,9 +61,7 @@ class Constants(BaseConstants):
 
 class Subsession(BaseSubsession):
     def creating_session(self):
-        #self.group_randomly()
         self.set_group_matrix(matching_matrix[self.round_number-1])
-        #自前のランダム化関数でうまくいくか
         """
     def vars_for_admin_report(self):
         #arrival time distribution?
@@ -76,6 +74,8 @@ class Group(BaseGroup):
     overwork = models.IntegerField()
     #こっちでサービス時間の設定を行う
     def calc_waitingtime(self):
+        for player in self.get_players():
+            player.service_time = np.random.geometric(0.25)
         workload = 0
         for t in range(Constants.T+1):
             workload = max(0,workload-1)
